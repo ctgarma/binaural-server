@@ -1,0 +1,19 @@
+{
+  "name": "binaural-renderer",
+  "version": "1.2.0",
+  "description": "Backend renderer for binaural beats with optional looping music (WAV 48k/24-bit), streaming with metadata headers.",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
