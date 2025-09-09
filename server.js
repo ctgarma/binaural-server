@@ -7,9 +7,23 @@ const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-const FFMPEG = process.env.FFMPEG_PATH || 'ffmpeg';
-const FFPROBE = process.env.FFPROBE_PATH || 'ffprobe';
+const PORT = process.env.PORT || 3002;
+
+// Prefer bundled static binaries if available, else env, else system PATH
+let FFMPEG = process.env.FFMPEG_PATH;
+let FFPROBE = process.env.FFPROBE_PATH;
+try {
+  // eslint-disable-next-line global-require, import/no-extraneous-dependencies
+  const ffmpegStatic = require('ffmpeg-static');
+  if (!FFMPEG && ffmpegStatic) FFMPEG = ffmpegStatic;
+} catch (_) { /* optional dependency */ }
+try {
+  // eslint-disable-next-line global-require, import/no-extraneous-dependencies
+  const ffprobeStatic = require('ffprobe-static');
+  if (!FFPROBE && ffprobeStatic && ffprobeStatic.path) FFPROBE = ffprobeStatic.path;
+} catch (_) { /* optional dependency */ }
+FFMPEG = FFMPEG || 'ffmpeg';
+FFPROBE = FFPROBE || 'ffprobe';
 
 app.use(express.json());
 
@@ -237,5 +251,7 @@ app.post('/generate', upload.single('music'), async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Binaural renderer listening on http://localhost:${PORT}`);
-  console.log('Ensure ffmpeg & ffprobe are installed (or set FFMPEG_PATH / FFPROBE_PATH).');
+  console.log(`Using ffmpeg: ${FFMPEG}`);
+  console.log(`Using ffprobe: ${FFPROBE}`);
+  console.log('If these are incorrect, set FFMPEG_PATH / FFPROBE_PATH.');
 });

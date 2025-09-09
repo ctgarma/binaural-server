@@ -1,0 +1,56 @@
+# Dependencies
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Testing/coverage
+coverage/
+.nyc_output/
+*.lcov
+
+# Build output
+dist/
+build/
+out/
+.tmp/
+tmp/
+temp/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# OS / Editor junk
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Uploaded and generated media
+uploads/
+# Generated WAVs from the renderer (remove if you want samples committed)
+*.wav
+*.wav.part
+*.wav.tmp
+session*.wav
+
+# Misc
+node-repl-history
+*.tgz
+.eslintcache

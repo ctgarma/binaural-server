@@ -10,8 +10,13 @@
   },
   "dependencies": {
     "express": "^4.19.2",
+    "ffmpeg-static": "^5.2.0",
+    "ffprobe-static": "^3.1.0",
+    "fft-js": "0.0.12",
     "multer": "^1.4.5-lts.1",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "wav": "^1.0.2",
+    "yargs": "^18.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"
