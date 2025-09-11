@@ -109,6 +109,19 @@ async function analyzeWavFile(filePath, opts = {}) {
         const rightFreq = dominantFreqInBand(right, sampleRate, bandMin, bandMax);
         const beatHz = Math.abs(leftFreq - rightFreq);
 
+        const classifyBeat = (hz) => {
+          if (!Number.isFinite(hz)) return { label: 'Unknown', range: 'n/a', notes: 'No measurable beat' };
+          if (hz < 0.5) return { label: 'Sub-delta', range: '<0.5 Hz', notes: 'Very slow oscillations' };
+          if (hz < 4)   return { label: 'Delta', range: '0.5–4 Hz', notes: 'Deep sleep, healing' };
+          if (hz < 8)   return { label: 'Theta', range: '4–8 Hz', notes: 'Meditation, creativity' };
+          if (hz < 12)  return { label: 'Alpha', range: '8–12 Hz', notes: 'Relaxed wakefulness, calm focus' };
+          if (hz <= 20) return { label: 'Beta', range: '12–20 Hz', notes: 'Alertness, concentration' };
+          if (hz <= 30) return { label: 'High Beta', range: '20–30 Hz', notes: 'Intense focus, arousal' };
+          if (hz <= 40) return { label: 'Low Gamma', range: '30–40 Hz', notes: 'Cognitive processing' };
+          return { label: 'Custom', range: '>40 Hz', notes: 'Outside typical target range' };
+        };
+        const bw = classifyBeat(beatHz);
+
         const bytesPerSample = (fmt.audioFormat === 3 ? (fmt.bitDepth / 8 || 4) : (fmt.bitDepth / 8));
         const approxSeconds = (buf.length / (fmt.channels * bytesPerSample * fmt.sampleRate)) || seconds;
 
@@ -117,6 +130,8 @@ async function analyzeWavFile(filePath, opts = {}) {
         console.log(`Dominant Left Frequency (band ${bandMin}-${bandMax} Hz): ${leftFreq.toFixed(2)} Hz`);
         console.log(`Dominant Right Frequency (band ${bandMin}-${bandMax} Hz): ${rightFreq.toFixed(2)} Hz`);
         console.log(`Calculated Beat Frequency: ${beatHz.toFixed(2)} Hz`);
+        console.log(`Brainwave Band: ${bw.label} (${bw.range})`);
+        console.log(`Typical Associations: ${bw.notes}`);
 
         const isBinaural = beatHz >= minBeat && beatHz <= maxBeat;
         if (isBinaural) {
